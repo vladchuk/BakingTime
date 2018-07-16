@@ -20,7 +20,7 @@ import java.util.List;
  * An activity representing a list of Steps. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link StepActivity} representing
+ * lead to a {@link StepPagerActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -74,7 +74,7 @@ public class StepListActivity extends AppCompatActivity {
                             .commit();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = StepActivity.newIntent(context, step, recipeId);
+                    Intent intent = StepPagerActivity.newIntent(context, step, recipeId);
                     context.startActivity(intent);
                 }
             }
@@ -97,7 +97,7 @@ public class StepListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(StepHolder holder, int position) {
             Step step = steps.get(position);
-            if (step.getId() > 0)
+//            if (step.getId() > 0)
                 holder.mIdView.setText(String.valueOf(step.getId()));
             holder.mDscrView.setText(step.getShortDescription());
             holder.itemView.setTag(step);

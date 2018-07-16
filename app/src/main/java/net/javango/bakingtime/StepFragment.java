@@ -12,7 +12,7 @@ import net.javango.bakingtime.model.Step;
 /**
  * A fragment representing a single Step detail screen.
  * This fragment is either contained in a {@link StepListActivity}
- * in two-pane mode (on tablets) or a {@link StepActivity}
+ * in two-pane mode (on tablets) or a {@link StepPagerActivity}
  * on handsets.
  */
 public class StepFragment extends Fragment {

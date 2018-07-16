@@ -19,7 +19,7 @@ import java.util.List;
  * item details are presented side-by-side with a list of items
  * in a {@link StepListActivity}.
  */
-public class StepActivity extends AppCompatActivity {
+public class StepPagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_STEP_OBJ = "net.javango.bakingtime.step_obj";
     private static final String EXTRA_RECIPE_ID = "net.javango.bakingtime.recipe_id";
@@ -28,7 +28,7 @@ public class StepActivity extends AppCompatActivity {
     private List<Step> steps;
 
     public static Intent newIntent(Context context, Step step, int recipeId) {
-        Intent intent = new Intent(context, StepActivity.class);
+        Intent intent = new Intent(context, StepPagerActivity.class);
         intent.putExtra(EXTRA_STEP_OBJ, step);
         intent.putExtra(EXTRA_RECIPE_ID, recipeId);
         return intent;
