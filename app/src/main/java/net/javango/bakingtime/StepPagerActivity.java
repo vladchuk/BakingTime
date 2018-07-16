@@ -67,12 +67,13 @@ public class StepActivity extends AppCompatActivity {
         });
 
         mViewPager.setCurrentItem(step.getId());
-//        for (int i = 0; i < steps.size(); i++) {
-//            if (steps.get(i).getId() == step.getId()) {
-//                mViewPager.setCurrentItem(i);
-//                break;
-//            }
-//        }
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                String title = steps.get(position).getShortDescription();
+                getSupportActionBar().setTitle(title);
+            }
+        });
     }
 
 }
