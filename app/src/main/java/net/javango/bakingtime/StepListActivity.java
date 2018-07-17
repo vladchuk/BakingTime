@@ -2,15 +2,19 @@ package net.javango.bakingtime;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import net.javango.bakingtime.model.Ingredient;
 import net.javango.bakingtime.model.Recipe;
 import net.javango.bakingtime.model.Step;
 
@@ -29,6 +33,8 @@ public class StepListActivity extends AppCompatActivity {
     private static final String EXTRA_RECIPE_ID = "net.javango.bakingtime.recipe_id";
 
     private boolean mTwoPane;
+    private Recipe recipe;
+    private ViewGroup ingredientLayout;
 
     public static Intent newIntent(Context context, int recipeId) {
         Intent intent = new Intent(context, StepListActivity.class);
@@ -51,9 +57,20 @@ public class StepListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.step_list);
         int recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, -1);
-        Recipe recipe = RecipeRepo.getInstance().getRecipe(recipeId);
+        recipe = RecipeRepo.getInstance().getRecipe(recipeId);
         recyclerView.setAdapter(new StepAdapter(this, recipe.getSteps(), mTwoPane, recipeId));
         setTitle(recipe.getName());
+        ingredientLayout = findViewById(R.id.ingredient_list);
+        populateReviews();
+    }
+
+    private void populateReviews() {
+        for (Ingredient ingr : recipe.getIngredients()) {
+            TextView view =  new TextView(this); //LayoutInflater.from(getContext()).inflate(R.layout.review_item, null);
+            String text = ingr.getName() + ", " + ingr.getQuantity() + " " + ingr.getMeasure();
+            view.setText(text);
+            ingredientLayout.addView(view);
+        }
     }
 
     public static class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {

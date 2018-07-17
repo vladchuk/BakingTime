@@ -1,10 +1,13 @@
 package net.javango.bakingtime.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * A recipe ingredient.
  */
 public class Ingredient {
 
+    @SerializedName("ingredient")
     private String name;
     private String measure;
     private float quantity;
