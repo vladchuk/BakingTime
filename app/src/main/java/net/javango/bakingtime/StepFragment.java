@@ -1,11 +1,26 @@
 package net.javango.bakingtime;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import net.javango.bakingtime.model.Step;
 
@@ -20,6 +35,9 @@ public class StepFragment extends Fragment {
     private static final String ARG_STEP = "step_obj";
 
     private Step step;
+    private SimpleExoPlayer player;
+    private SimpleExoPlayerView playerView;
+
 
     public static StepFragment newInstance(Step step) {
         Bundle args = new Bundle();
@@ -40,7 +58,33 @@ public class StepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.step_detail, container, false);
-        ((TextView) rootView.findViewById(R.id.step_detail)).setText(step.getDescription());
+        TextView descrView =  rootView.findViewById(R.id.step_detail);
+        descrView.setText(step.getDescription());
+        playerView = rootView.findViewById(R.id.playerView);
+        Uri mediaUri = Uri.parse(step.getVideoUrl());
+        setupPlayer(mediaUri);
         return rootView;
+    }
+
+    private void setupPlayer(Uri mediaUri) {
+        if (player == null) {
+            Context context = getActivity();
+
+            // Create an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            playerView.setPlayer(player);
+
+            // Set the ExoPlayer.EventListener to this activity.
+//            player.addListener(this);
+
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(context, "ClassicalMusicQuiz");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+                    context, userAgent), new DefaultExtractorsFactory(), null, null);
+            player.prepare(mediaSource);
+//            player.setPlayWhenReady(true);
+        }
     }
 }

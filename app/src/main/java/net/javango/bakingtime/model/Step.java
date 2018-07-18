@@ -1,5 +1,7 @@
 package net.javango.bakingtime.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ public class Step implements Serializable {
     private int id;
     private String shortDescription;
     private String description;
-    private String videoUrl;
+    private String videoURL;
     private String thumbnailUrl;
 
     public int getId() {
@@ -37,11 +39,11 @@ public class Step implements Serializable {
     }
 
     public String getVideoUrl() {
-        return videoUrl;
+        return videoURL;
     }
 
     public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+        this.videoURL = videoUrl;
     }
 
     public String getThumbnailUrl() {
