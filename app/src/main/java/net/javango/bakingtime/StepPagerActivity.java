@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import net.javango.bakingtime.model.Recipe;
 import net.javango.bakingtime.model.Step;
 
 import java.util.List;
@@ -52,7 +53,8 @@ public class StepPagerActivity extends AppCompatActivity {
 //        }
 
         mViewPager = (ViewPager) findViewById(R.id.step_view_pager);
-        steps = RecipeRepo.getInstance().getRecipe(rid).getSteps();
+        Recipe recipe = RecipeRepo.getInstance().getRecipe(rid);
+        steps = recipe.getSteps();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override

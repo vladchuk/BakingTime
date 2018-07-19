@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -21,6 +22,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import net.javango.bakingtime.model.Step;
 
@@ -37,7 +39,8 @@ public class StepFragment extends Fragment {
     private Step step;
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
-
+    private ImageView thumbnameView;
+    private TextView noMediaView;
 
     public static StepFragment newInstance(Step step) {
         Bundle args = new Bundle();
@@ -60,10 +63,37 @@ public class StepFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.step_detail, container, false);
         TextView descrView =  rootView.findViewById(R.id.step_detail);
         descrView.setText(step.getDescription());
-        playerView = rootView.findViewById(R.id.playerView);
-        Uri mediaUri = Uri.parse(step.getVideoUrl());
-        setupPlayer(mediaUri);
+        playerView = rootView.findViewById(R.id.player_view);
+        thumbnameView = rootView.findViewById(R.id.thumbnail_view);
+        noMediaView = rootView.findViewById(R.id.no_media_view);
+        setupMedia();
         return rootView;
+    }
+
+    private void setupMedia() {
+        if (step.getVideoUrl().length() > 0) {
+            setVisible(true, false, false);
+            Uri mediaUri = Uri.parse(step.getVideoUrl());
+            setupPlayer(mediaUri);
+        }
+        else if (step.getThumbnailUrl().length() > 0) {
+            setVisible(false, true, false);
+            Picasso.with(getContext()).
+                    load(step.getThumbnailUrl()).
+//                    resize(width, height).
+//                    placeholder(R.drawable.poster_placeholder).
+                    into(thumbnameView);
+        }
+        else {
+            setVisible(false, false, true);
+        }
+    }
+
+    // controls visibility of the media, only one parameter can be true
+    private void setVisible(boolean video, boolean image, boolean noMedia) {
+        playerView.setVisibility(video ? View.VISIBLE : View.INVISIBLE);
+        thumbnameView.setVisibility(image ? View.VISIBLE : View.INVISIBLE);
+        noMediaView.setVisibility(noMedia ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void setupPlayer(Uri mediaUri) {
@@ -85,6 +115,19 @@ public class StepFragment extends Fragment {
                     context, userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
 //            player.setPlayWhenReady(true);
+        }
+    }
+
+    /**
+     * Release the player when the activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            player.stop();
+            player.release();
+            player = null;
         }
     }
 }

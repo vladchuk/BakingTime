@@ -12,7 +12,7 @@ public class Step implements Serializable {
     private String shortDescription;
     private String description;
     private String videoURL;
-    private String thumbnailUrl;
+    private String thumbnailURL;
 
     public int getId() {
         return id;
@@ -47,10 +47,10 @@ public class Step implements Serializable {
     }
 
     public String getThumbnailUrl() {
-        return thumbnailUrl;
+        return thumbnailURL;
     }
 
     public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+        this.thumbnailURL = thumbnailUrl;
     }
 }

@@ -2,4 +2,5 @@
     <string name="app_name">Baking Time</string>
     <string name="title_step_detail">Step Detail</string>
     <string name="ingredients">Ingredients</string>
+    <string name="media_not_available">Media Not Available</string>
 </resources>
