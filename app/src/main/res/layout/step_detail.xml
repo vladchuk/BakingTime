@@ -9,7 +9,7 @@
 
     <FrameLayout
         android:id="@+id/media_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
@@ -17,17 +17,10 @@
             style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:textAlignment="center"
+            android:gravity="center"
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:text="@string/media_not_available"
-            tools:context=".StepFragment"/>
-
-        <ImageView
-            android:id="@+id/thumbnail_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             tools:context=".StepFragment"/>
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
@@ -41,11 +34,12 @@
 
     <TextView
         android:id="@+id/step_detail"
-        style="?android:attr/textAppearanceLarge"
+        style="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/media_container"
         android:layout_weight="1"
+        android:paddingTop="32dp"
         android:padding="16dp"
         tools:context=".StepFragment"/>
 

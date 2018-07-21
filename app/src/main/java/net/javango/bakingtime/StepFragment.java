@@ -39,7 +39,6 @@ public class StepFragment extends Fragment {
     private Step step;
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
-    private ImageView thumbnameView;
     private TextView noMediaView;
 
     public static StepFragment newInstance(Step step) {
@@ -64,7 +63,6 @@ public class StepFragment extends Fragment {
         TextView descrView =  rootView.findViewById(R.id.step_detail);
         descrView.setText(step.getDescription());
         playerView = rootView.findViewById(R.id.player_view);
-        thumbnameView = rootView.findViewById(R.id.thumbnail_view);
         noMediaView = rootView.findViewById(R.id.no_media_view);
         setupMedia();
         return rootView;
@@ -76,14 +74,6 @@ public class StepFragment extends Fragment {
             Uri mediaUri = Uri.parse(step.getVideoUrl());
             setupPlayer(mediaUri);
         }
-        else if (step.getThumbnailUrl().length() > 0) {
-            setVisible(false, true, false);
-            Picasso.with(getContext()).
-                    load(step.getThumbnailUrl()).
-//                    resize(width, height).
-//                    placeholder(R.drawable.poster_placeholder).
-                    into(thumbnameView);
-        }
         else {
             setVisible(false, false, true);
         }
@@ -91,9 +81,8 @@ public class StepFragment extends Fragment {
 
     // controls visibility of the media, only one parameter can be true
     private void setVisible(boolean video, boolean image, boolean noMedia) {
-        playerView.setVisibility(video ? View.VISIBLE : View.INVISIBLE);
-        thumbnameView.setVisibility(image ? View.VISIBLE : View.INVISIBLE);
-        noMediaView.setVisibility(noMedia ? View.VISIBLE : View.INVISIBLE);
+        playerView.setVisibility(video ? View.VISIBLE : View.GONE);
+        noMediaView.setVisibility(noMedia ? View.VISIBLE : View.GONE);
     }
 
     private void setupPlayer(Uri mediaUri) {
