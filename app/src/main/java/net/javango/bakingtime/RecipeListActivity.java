@@ -31,8 +31,8 @@ public class RecipeListActivity extends AppCompatActivity {
         RecipeRepo.getInstance().getRecipes().observe(this, new Observer<List<Recipe>>() {
 
             @Override
-            public void onChanged(@Nullable List<Recipe> movies) {
-                recipeAdapter.setData(movies);
+            public void onChanged(@Nullable List<Recipe> recipes) {
+                recipeAdapter.setData(recipes);
             }
         });
         setTitle(R.string.app_name);
