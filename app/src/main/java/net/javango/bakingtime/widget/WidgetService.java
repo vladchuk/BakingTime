@@ -1,14 +1,18 @@
 package net.javango.bakingtime.widget;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import net.javango.bakingtime.R;
 import net.javango.bakingtime.RecipeRepo;
 import net.javango.bakingtime.model.Ingredient;
 import net.javango.bakingtime.model.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,68 +21,77 @@ import retrofit2.Response;
 
 public class WidgetService extends RemoteViewsService {
 
-    private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-
-    public static List<Ingredient> ingredients;
-
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new ListRemoteViewsFactory(getApplicationContext(), intent);
     }
-
-    /**
-     * Retrieve appwidget id from intent it is needed to update widget later
-     * initialize our AQuery class
-     */
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID))
-            appWidgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-        fetchData();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    /**
-     * Gec data with callback
-     */
-    private void fetchData() {
-        final int recipeId = 1;
-        RecipeRepo.getInstance().getRecipe(recipeId, new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                List<Recipe> list = response.body();
-                for (Recipe r : list)
-                    if (r.getId() == recipeId)
-                        ingredients = r.getIngredients();
-
-                populateWidget();
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    /**
-     * Method which sends broadcast to WidgetProvider
-     * so that widget is notified to do necessary action
-     * and here action == WidgetProvider.DATA_FETCHED
-     */
-    private void populateWidget() {
-        Intent widgetUpdateIntent = new Intent();
-        widgetUpdateIntent.setAction(RecipeWidget.DATA_FETCHED);
-        widgetUpdateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        sendBroadcast(widgetUpdateIntent);
-
-        this.stopSelf();
-    }
 }
+
+class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+        private List<Ingredient> ingredients;
+        private Context context;
+
+        public ListRemoteViewsFactory(Context context, Intent intent) {
+            this.context = context;
+        }
+
+        @Override
+        public void onCreate() {
+            // empty
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 1; // all items in the view are the same
+        }
+
+        @Override
+        public int getCount() {
+            return ingredients.size();
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public RemoteViews getLoadingView() {
+            return null;
+        }
+
+        @Override
+        public void onDestroy() {
+            // empty
+        }
+
+        //called on start and when notifyAppWidgetViewDataChanged is called
+        @Override
+        public void onDataSetChanged() {
+            Recipe r = RecipeRepo.getInstance().getRecipeSync(1);
+            ingredients = r.getIngredients();
+        }
+
+        /*
+         *Similar to getView of Adapter where instead of View
+         *we return RemoteViews
+         *
+         */
+        @Override
+        public RemoteViews getViewAt(int position) {
+            final RemoteViews remoteView = new RemoteViews(
+                    context.getPackageName(), R.layout.list_item_ingredient);
+            Ingredient ingredient = ingredients.get(position);
+            remoteView.setTextViewText(R.id.ingredient_name, ingredient.getName());
+            remoteView.setTextViewText(R.id.ingredient_measure, ingredient.getMeasure());
+            remoteView.setTextViewText(R.id.ingredient_quantity, String.valueOf(ingredient.getQuantity()));
+
+            return remoteView;
+        }
+
+    }

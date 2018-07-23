@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 
 import net.javango.bakingtime.model.Recipe;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +71,24 @@ public class RecipeRepo {
         return recipeMap.get(id);
     }
 
-    public void getRecipe(int id, Callback<List<Recipe>> callback) {
-        service.getRecipes().enqueue(callback);
+    public Recipe getRecipeSync(int id) {
+        // use caching if possible
+        Recipe recipe = recipeMap.get(id);
+        if (recipe != null)
+            return recipe;
+
+        List<Recipe> list = null;
+        try {
+            list = service.getRecipes().execute().body();
+        } catch (IOException e) {
+            return null;
+        }
+        for (Recipe r : list) {
+            if (r.getId() == id)
+                return r;
+        }
+
+        return null;
     }
 
 }

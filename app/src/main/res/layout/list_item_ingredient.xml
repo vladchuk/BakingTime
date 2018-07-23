@@ -26,30 +26,21 @@
         android:id="@+id/ingredient_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_gravity="center_horizontal"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        style="@style/widget_style"
         tools:text="Flour" />
-
-    <TextView
-        android:id="@+id/ingredient_measure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_gravity="center_horizontal"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        tools:text="Cup" />
 
     <TextView
         android:id="@+id/ingredient_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_gravity="center_horizontal"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        style="@style/widget_style"
         tools:text="4" />
+
+    <TextView
+        android:id="@+id/ingredient_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/widget_style"
+        tools:text="Cup"/>
 
 </LinearLayout>
