@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -38,7 +39,7 @@ public class StepFragment extends Fragment {
 
     private Step step;
     private SimpleExoPlayer player;
-    private SimpleExoPlayerView playerView;
+    private PlayerView playerView;
     private TextView noMediaView;
 
     public static StepFragment newInstance(Step step) {

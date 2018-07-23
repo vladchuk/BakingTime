@@ -70,4 +70,8 @@ public class RecipeRepo {
         return recipeMap.get(id);
     }
 
+    public void getRecipe(int id, Callback<List<Recipe>> callback) {
+        service.getRecipes().enqueue(callback);
+    }
+
 }
