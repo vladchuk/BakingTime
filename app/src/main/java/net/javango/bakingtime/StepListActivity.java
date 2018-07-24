@@ -42,6 +42,12 @@ public class StepListActivity extends AppCompatActivity {
         return intent;
     }
 
+    public static Intent newFillInIntent(int recipeId) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_RECIPE_ID, recipeId);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

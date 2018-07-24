@@ -61,4 +61,8 @@ public class Recipe {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String toString() {
+        return name;
+    }
 }

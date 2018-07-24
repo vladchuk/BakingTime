@@ -3,12 +3,15 @@ package net.javango.bakingtime.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import net.javango.bakingtime.R;
 import net.javango.bakingtime.RecipeRepo;
+import net.javango.bakingtime.StepListActivity;
 import net.javango.bakingtime.model.Ingredient;
 import net.javango.bakingtime.model.Recipe;
 
@@ -21,6 +24,12 @@ import retrofit2.Response;
 
 public class WidgetService extends RemoteViewsService {
 
+    public static Intent newIntent(Context context, int recipeId) {
+        Intent intent = new Intent(context, WidgetService.class);
+        intent.setData(Uri.fromParts("content", String.valueOf(recipeId), null));
+        return intent;
+    }
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new ListRemoteViewsFactory(getApplicationContext(), intent);
@@ -28,11 +37,14 @@ public class WidgetService extends RemoteViewsService {
 }
 
 class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+
         private List<Ingredient> ingredients;
         private Context context;
+        private int recipeId;
 
         public ListRemoteViewsFactory(Context context, Intent intent) {
             this.context = context;
+            recipeId = Integer.valueOf(intent.getData().getSchemeSpecificPart());
         }
 
         @Override
@@ -70,18 +82,12 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             // empty
         }
 
-        //called on start and when notifyAppWidgetViewDataChanged is called
         @Override
         public void onDataSetChanged() {
-            Recipe r = RecipeRepo.getInstance().getRecipeSync(1);
+            Recipe r = RecipeRepo.getInstance().getRecipeSync(recipeId);
             ingredients = r.getIngredients();
         }
 
-        /*
-         *Similar to getView of Adapter where instead of View
-         *we return RemoteViews
-         *
-         */
         @Override
         public RemoteViews getViewAt(int position) {
             final RemoteViews remoteView = new RemoteViews(
@@ -91,6 +97,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             remoteView.setTextViewText(R.id.ingredient_measure, ingredient.getMeasure());
             remoteView.setTextViewText(R.id.ingredient_quantity, String.valueOf(ingredient.getQuantity()));
 
+            Intent fillInIntent = StepListActivity.newFillInIntent(recipeId);
+            remoteView.setOnClickFillInIntent(R.id.ingredient_name, fillInIntent);
             return remoteView;
         }
 

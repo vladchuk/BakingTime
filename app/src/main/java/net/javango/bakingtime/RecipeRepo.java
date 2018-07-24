@@ -91,4 +91,8 @@ public class RecipeRepo {
         return null;
     }
 
+    public void getRecipe(int id, Callback<List<Recipe>> callback) {
+        service.getRecipes().enqueue(callback);
+    }
+
 }

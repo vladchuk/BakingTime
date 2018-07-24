@@ -5,35 +5,23 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.widget.RemoteViews;
 
 import net.javango.bakingtime.R;
+import net.javango.bakingtime.StepListActivity;
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link RecipeWidgetConfigureActivity RecipeWidgetConfigureActivity}
+ * App Widget Configuration implemented in {@link WidgetConfigureActivity WidgetConfigureActivity}
  */
 public class RecipeWidget extends AppWidgetProvider {
-
-    public static final String DATA_FETCHED = "net.javango.bakingtime.DATA_FETCHED";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-//        CharSequence widgetText = RecipeWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-//        // Construct the RemoteViews object
-//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-//        views.setTextViewText(R.id.appwidget_text, widgetText);
-//
-//        // Instruct the widget manager to update the widget
-        RemoteViews views = updateWidgetListView(context, appWidgetId);
+        // Instruct the widget manager to update the widget
+        RemoteViews views = updateWidget(context, appWidgetId);
         appWidgetManager.updateAppWidget(appWidgetId, views);
-
-
-//        Intent serviceIntent = new Intent(context, WidgetService.class);
-//        serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
-//        context.startService(serviceIntent);
     }
 
     @Override
@@ -48,7 +36,7 @@ public class RecipeWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            RecipeWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            WidgetConfigureActivity.deleteWidgetPref(context, appWidgetId);
         }
     }
 
@@ -62,61 +50,24 @@ public class RecipeWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    private static RemoteViews updateWidgetListView(Context context, int appWidgetId) {
+    private static RemoteViews updateWidget(Context context, int appWidgetId) {
+        int recipeId = WidgetConfigureActivity.getRecipeId(context, appWidgetId);
+        String recipeName = WidgetConfigureActivity.getRecipeName(context, appWidgetId);
+
+        // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        // Set the GridWidgetService intent to act as the adapter for the GridView
-        Intent intent = new Intent(context, WidgetService.class);
+        views.setTextViewText(R.id.wiget_name, recipeName);
+        Intent intent = WidgetService.newIntent(context, recipeId);
         views.setRemoteAdapter(R.id.list_view, intent);
-        // Set the PlantDetailActivity intent to launch when clicked
-//        Intent appIntent = new Intent(context, PlantDetailActivity.class);
-//        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
-        // Handle empty gardens
+
+        // launch corresponding activity
+        Intent appIntent = new Intent(context, StepListActivity.class);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.list_view, appPendingIntent);
+
         views.setEmptyView(R.id.empty_view, R.id.empty_view);
         return views;
-
-
-//        // which layout to show on widget
-//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-//                R.layout.recipe_widget);
-//
-//        // RemoteViews Service needed to provide adapter for ListView
-//        Intent svcIntent = new Intent(context, WidgetService.class);
-//        // passing app widget id to that RemoteViews Service
-//        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-//        // setting a unique Uri to the intent
-//        // don't know its purpose to me right now
-//        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-//        // setting adapter to listview of the widget
-//        remoteViews.setRemoteAdapter(R.id.list_view, svcIntent);
-//        // setting an empty view in case of no data
-//        remoteViews.setEmptyView(R.id.list_view, R.id.empty_view);
-//        return remoteViews;
     }
-
-    /**
-     * It receives the broadcast as per the action set on intent filters on
-     * Manifest.xml once data is fetched from RemotePostService,it sends
-     * broadcast and WidgetProvider notifies to change the data the data change
-     * right now happens on ListRemoteViewsFactory as it takes RemoteFetchService
-     * listItemList as data
-     */
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        if (intent.getAction().equals(DATA_FETCHED)) {
-            int appWidgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager = AppWidgetManager
-                    .getInstance(context);
-            RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        }
-
-    }
-
-
 
 }
 
