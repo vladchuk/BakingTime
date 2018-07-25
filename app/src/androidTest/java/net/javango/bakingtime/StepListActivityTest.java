@@ -52,6 +52,11 @@ public class StepListActivityTest {
     @Before
     public void setUp() {
       RecipeRepo.getInstance().getRecipes();
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -60,10 +65,10 @@ public class StepListActivityTest {
         testRule.launchActivity(intent);
 
         onView(withId(R.id.step_list))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
         // check correct step by description
-        onView(allOf(withId(R.id.step_detail), isDisplayingAtLeast(20))).check(matches(withText(containsString("Recipe Introduction"))));
+        onView(allOf(withId(R.id.no_media_view), isDisplayed())).check(matches(withText(containsString("Video Not Available"))));
 
     }
 

@@ -104,6 +104,14 @@ public class StepFragment extends Fragment {
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (player != null) {
+            player.setPlayWhenReady(false);
+        }
+    }
+
     /**
      * Release the player when the activity is destroyed.
      */

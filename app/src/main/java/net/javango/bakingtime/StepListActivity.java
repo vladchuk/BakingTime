@@ -2,16 +2,13 @@ package net.javango.bakingtime;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import net.javango.bakingtime.model.Ingredient;
@@ -67,12 +64,12 @@ public class StepListActivity extends AppCompatActivity {
         recyclerView.setAdapter(new StepAdapter(this, recipe.getSteps(), mTwoPane, recipeId));
         setTitle(recipe.getName());
         ingredientLayout = findViewById(R.id.ingredient_list);
-        populateReviews();
+        populateIngredients();
     }
 
-    private void populateReviews() {
+    private void populateIngredients() {
         for (Ingredient ingr : recipe.getIngredients()) {
-            TextView view =  new TextView(this); //LayoutInflater.from(getContext()).inflate(R.layout.review_item, null);
+            TextView view =  new TextView(this);
             String text = ingr.getName() + ", " + ingr.getQuantity() + " " + ingr.getMeasure();
             view.setText(text);
             ingredientLayout.addView(view);
@@ -120,7 +117,7 @@ public class StepListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(StepHolder holder, int position) {
             Step step = steps.get(position);
-//            if (step.getId() > 0)
+            if (step.getId() > 0)
                 holder.mIdView.setText(String.valueOf(step.getId()));
             holder.mDscrView.setText(step.getShortDescription());
             holder.itemView.setTag(step);
