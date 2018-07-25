@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#CCF5FF"
-              android:padding="2dp"
+              android:background="@drawable/rounded_rectangle"
+              android:padding="4dp"
               android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,7 @@
         android:text="Nutella Pie"
         android:textSize="18sp"
         android:singleLine="true"
-        android:textColor="@android:color/holo_purple"
+        android:textColor="@color/titleColor"
         android:textStyle="bold"
         />
 

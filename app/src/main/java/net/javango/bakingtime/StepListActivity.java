@@ -119,6 +119,8 @@ public class StepListActivity extends AppCompatActivity {
             Step step = steps.get(position);
             if (step.getId() > 0)
                 holder.mIdView.setText(String.valueOf(step.getId()));
+            else
+                holder.mIdView.setVisibility(View.GONE);
             holder.mDscrView.setText(step.getShortDescription());
             holder.itemView.setTag(step);
             holder.itemView.setOnClickListener(mOnClickListener);
