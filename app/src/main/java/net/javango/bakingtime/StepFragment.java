@@ -97,7 +97,7 @@ public class StepFragment extends Fragment {
             playerView.setPlayer(player);
 
             // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(context, "ClassicalMusicQuiz");
+            String userAgent = Util.getUserAgent(context, "BakingTime");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     context, userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);

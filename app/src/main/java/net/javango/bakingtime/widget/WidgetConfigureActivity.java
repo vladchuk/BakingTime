@@ -59,7 +59,6 @@ public class WidgetConfigureActivity extends Activity {
             return;
         }
 
-       // mAppWidgetText.setText(loadTitlePref(WidgetConfigureActivity.this, widgetId));
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {

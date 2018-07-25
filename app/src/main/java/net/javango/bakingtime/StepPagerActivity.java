@@ -42,16 +42,6 @@ public class StepPagerActivity extends AppCompatActivity {
         final Step step = (Step) getIntent().getSerializableExtra(EXTRA_STEP_OBJ);
         int rid = getIntent().getIntExtra(EXTRA_RECIPE_ID, -1);
 
-//        FragmentManager fm = getSupportFragmentManager();
-//        Fragment fragment = fm.findFragmentById(R.id.step_detail_container);
-//        if (fragment == null) {
-//            Step step = (Step) getIntent().getSerializableExtra(EXTRA_STEP_OBJ);
-//            fragment = StepFragment.newInstance(step);
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.step_detail_container, fragment)
-//                    .commit();
-//        }
-
         mViewPager = (ViewPager) findViewById(R.id.step_view_pager);
         Recipe recipe = RecipeRepo.getInstance().getRecipe(rid);
         steps = recipe.getSteps();

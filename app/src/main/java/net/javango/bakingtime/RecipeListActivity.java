@@ -22,9 +22,6 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
         RecyclerView recyclerView = findViewById(R.id.recipe_list);
         final RecipeAdapter recipeAdapter = new RecipeAdapter(this);
         recyclerView.setAdapter(recipeAdapter);
