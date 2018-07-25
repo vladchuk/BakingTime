@@ -25,7 +25,7 @@ public class StepPagerActivity extends AppCompatActivity {
     static final String EXTRA_STEP_OBJ = "net.javango.bakingtime.step_obj";
     static final String EXTRA_RECIPE_ID = "net.javango.bakingtime.recipe_id";
 
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
     private List<Step> steps;
 
     public static Intent newIntent(Context context, Step step, int recipeId) {
@@ -42,11 +42,11 @@ public class StepPagerActivity extends AppCompatActivity {
         final Step step = (Step) getIntent().getSerializableExtra(EXTRA_STEP_OBJ);
         int rid = getIntent().getIntExtra(EXTRA_RECIPE_ID, -1);
 
-        mViewPager = (ViewPager) findViewById(R.id.step_view_pager);
+        viewPager = (ViewPager) findViewById(R.id.step_view_pager);
         Recipe recipe = RecipeRepo.getInstance().getRecipe(rid);
         steps = recipe.getSteps();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 return StepFragment.newInstance(steps.get(position));
@@ -58,8 +58,9 @@ public class StepPagerActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager.setCurrentItem(step.getId());
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager.setCurrentItem(step.getId());
+        getSupportActionBar().setTitle(step.getShortDescription());
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 String title = steps.get(position).getShortDescription();
