@@ -96,15 +96,11 @@ public class StepFragment extends Fragment {
             player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             playerView.setPlayer(player);
 
-            // Set the ExoPlayer.EventListener to this activity.
-//            player.addListener(this);
-
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(context, "ClassicalMusicQuiz");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     context, userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
-//            player.setPlayWhenReady(true);
         }
     }
 

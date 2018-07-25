@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class StepPagerActivity extends AppCompatActivity {
 
-    private static final String EXTRA_STEP_OBJ = "net.javango.bakingtime.step_obj";
-    private static final String EXTRA_RECIPE_ID = "net.javango.bakingtime.recipe_id";
+    static final String EXTRA_STEP_OBJ = "net.javango.bakingtime.step_obj";
+    static final String EXTRA_RECIPE_ID = "net.javango.bakingtime.recipe_id";
 
     private ViewPager mViewPager;
     private List<Step> steps;
