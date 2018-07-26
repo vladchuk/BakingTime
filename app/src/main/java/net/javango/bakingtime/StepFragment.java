@@ -1,8 +1,10 @@
 package net.javango.bakingtime;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,8 @@ import net.javango.bakingtime.model.Step;
 public class StepFragment extends Fragment {
 
     private static final String ARG_STEP = "step_obj";
+    private static final String PLAYER_POS = "player_position";
+    private static final String PLAYER_STATE = "player_state";
 
     private Step step;
     private SimpleExoPlayer player;
@@ -68,7 +72,23 @@ public class StepFragment extends Fragment {
         noMediaView = rootView.findViewById(R.id.no_media_view);
         stepImage = rootView.findViewById(R.id.step_image);
         setupMedia();
+        // restore player state
+        if (savedInstanceState != null && player != null) {
+            long playerPos = savedInstanceState.getLong(PLAYER_POS);
+            player.seekTo(playerPos);
+            boolean playerState = savedInstanceState.getBoolean(PLAYER_STATE);
+            player.setPlayWhenReady(playerState);
+        }
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (player != null) {
+            outState.putLong(PLAYER_POS, player.getCurrentPosition());
+            outState.putBoolean(PLAYER_STATE, player.getPlayWhenReady());
+        }
     }
 
     private void setupMedia() {
@@ -82,9 +102,8 @@ public class StepFragment extends Fragment {
         if (step.getThumbnailUrl().length() > 0) {
             Picasso.with(getContext()).
                     load(step.getThumbnailUrl()).
-            into(stepImage);
-        }
-        else {
+                    into(stepImage);
+        } else {
             stepImage.setVisibility(View.GONE);
         }
     }
@@ -116,7 +135,7 @@ public class StepFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (player != null) {
+        if (player != null && !hidden) {
             player.setPlayWhenReady(false);
         }
     }
