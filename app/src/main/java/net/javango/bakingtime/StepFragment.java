@@ -91,11 +91,44 @@ public class StepFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT >= 24) {
+            setupMedia();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT < 24 || player == null)) {
+            setupMedia();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT < 24) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT >= 24) {
+            releasePlayer();
+        }
+    }
+
+
     private void setupMedia() {
         if (step.getVideoUrl().length() > 0) {
             setVisible(true, false, false);
             Uri mediaUri = Uri.parse(step.getVideoUrl());
-            setupPlayer(mediaUri);
+            initPlayer(mediaUri);
         } else {
             setVisible(false, false, true);
         }
@@ -114,7 +147,7 @@ public class StepFragment extends Fragment {
         noMediaView.setVisibility(noMedia ? View.VISIBLE : View.GONE);
     }
 
-    private void setupPlayer(Uri mediaUri) {
+    private void initPlayer(Uri mediaUri) {
         if (player == null) {
             Context context = getActivity();
 
@@ -140,12 +173,7 @@ public class StepFragment extends Fragment {
         }
     }
 
-    /**
-     * Release the player when the activity is destroyed.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private void releasePlayer() {
         if (player != null) {
             player.stop();
             player.release();
