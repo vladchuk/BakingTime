@@ -41,6 +41,7 @@ public class StepFragment extends Fragment {
     private SimpleExoPlayer player;
     private PlayerView playerView;
     private TextView noMediaView;
+    private ImageView stepImage;
 
     public static StepFragment newInstance(Step step) {
         Bundle args = new Bundle();
@@ -61,10 +62,11 @@ public class StepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.step_detail, container, false);
-        TextView descrView =  rootView.findViewById(R.id.step_detail);
+        TextView descrView = rootView.findViewById(R.id.step_detail);
         descrView.setText(step.getDescription());
         playerView = rootView.findViewById(R.id.player_view);
         noMediaView = rootView.findViewById(R.id.no_media_view);
+        stepImage = rootView.findViewById(R.id.step_image);
         setupMedia();
         return rootView;
     }
@@ -74,9 +76,16 @@ public class StepFragment extends Fragment {
             setVisible(true, false, false);
             Uri mediaUri = Uri.parse(step.getVideoUrl());
             setupPlayer(mediaUri);
+        } else {
+            setVisible(false, false, true);
+        }
+        if (step.getThumbnailUrl().length() > 0) {
+            Picasso.with(getContext()).
+                    load(step.getThumbnailUrl()).
+            into(stepImage);
         }
         else {
-            setVisible(false, false, true);
+            stepImage.setVisibility(View.GONE);
         }
     }
 

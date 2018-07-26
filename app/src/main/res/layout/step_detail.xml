@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/baseBackground"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/baseBackground"
     >
 
     <FrameLayout
@@ -18,9 +19,9 @@
             style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:gravity="center"
             android:layout_weight="1"
             android:background="@color/mainColor"
+            android:gravity="center"
             android:text="@string/media_not_available"
             tools:context=".StepFragment"/>
 
@@ -33,6 +34,13 @@
             />
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/step_image"
+        android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        />
+
     <TextView
         android:id="@+id/step_detail"
         style="?android:attr/textAppearanceMedium"
@@ -40,8 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/media_container"
         android:layout_weight="1"
-        android:paddingTop="32dp"
         android:padding="16dp"
+        android:paddingTop="32dp"
         tools:context=".StepFragment"/>
 
-</RelativeLayout>
+</LinearLayout>
