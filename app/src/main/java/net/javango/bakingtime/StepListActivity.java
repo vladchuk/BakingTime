@@ -50,9 +50,6 @@ public class StepListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         if (findViewById(R.id.step_detail_container) != null) {
             // use two-pane mode for tablets
             mTwoPane = true;
