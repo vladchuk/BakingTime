@@ -51,12 +51,7 @@ public class StepListActivityTest {
 
     @Before
     public void setUp() {
-      RecipeRepo.getInstance().getRecipes();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+      RecipeRepo.getInstance().getRecipesSync();
     }
 
     @Test

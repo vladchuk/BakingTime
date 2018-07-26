@@ -56,7 +56,7 @@ public class StepPagerActivityTest {
 
     @Before
     public void setUp() {
-        RecipeRepo.getInstance().getRecipes();
+        RecipeRepo.getInstance().getRecipesSync();
     }
 
     public static Intent newIntent(Step step, int recipeId) {

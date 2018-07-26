@@ -91,8 +91,16 @@ public class RecipeRepo {
         return null;
     }
 
-    public void getRecipe(int id, Callback<List<Recipe>> callback) {
-        service.getRecipes().enqueue(callback);
+    public void getRecipesSync() {
+        try {
+            Response<List<Recipe>> res = service.getRecipes().execute();
+            List<Recipe> list = res.body();
+            for (Recipe r : list)
+                recipeMap.put(r.getId(), r);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
